@@ -1,0 +1,162 @@
+<div class="container">
+  <div *ngIf="!isInvoiceVisible">
+    <div class="row">
+        <div class="col-sm-6">
+            <form [formGroup]="customerDetails">
+            <div class="form-gorup row mt-2">
+                <label for="" class="col-sm-2">Customer Name</label>
+                <div class="col-sm-4">        
+                <input type="text" class="form-control" formControlName="Name">
+                <div class="text text-danger" *ngIf="customer.Name.touched && customer.Name.invalid">Customer Name is required</div>
+                 </div>
+            </div>
+            <div class="form-group row mt-2">
+                <label class="col-sm-2"> Address:  </label>
+                <div class="col-sm-4">
+                 <input  type="text" class="form-control" formControlName="Address">
+                 <div class="text text-danger" *ngIf="customer.Address.touched && customer.Address.invalid">Address is required</div>
+                </div>
+            </div>
+            <div class="form-group row mt-2">
+                <label class="col-sm-2"> Mobile:  </label>
+                <div class="col-sm-4">
+                 <input  type="text" class="form-control" formControlName="Mobile">
+                 <div class="text text-danger" *ngIf="customer.Mobile.touched && customer.Mobile.invalid">Mobile is required</div>
+                </div>
+            </div>
+            <div class="form-group row mt-2">
+                <label class="col-sm-2"> PAN:  </label>
+                <div class="col-sm-4">
+                 <input  type="text" class="form-control" formControlName="PAN">
+                 <div class="text text-danger" *ngIf="customer.PAN.touched && customer.PAN.invalid">PAN is required</div>
+                </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-sm-6">
+            <form [formGroup]="calculate">
+                <div class="form-gorup row mt-2">
+                    <label for="" class="col-sm-2">Product</label>
+                    <div class="col-sm-4">        
+                    <input type="text" class="form-control" formControlName="Product" required>
+                    <div class="text-danger" *ngIf="calculateForm.Product.touched && calculateForm.Product.invalid">Product is required</div>
+                     </div>
+                </div>
+                <div class="form-gorup row mt-2">
+                    <label for="" class="col-sm-2">Gross Wt</label>
+                    <div class="col-sm-4">        
+                    <input type="text" class="form-control" formControlName="GWT">
+                    <div class="text-danger" *ngIf="calculateForm.GWT.touched && calculateForm.GWT.invalid">Gross Weight is required</div>
+                    <div class="text-danger" *ngIf="calculateForm.GWT.errors?.pattern">Only numbers allowed</div>
+                     </div>
+                </div>
+                <div class="form-gorup row mt-2">
+                    <label for="" class="col-sm-2">Net Wt</label>
+                    <div class="col-sm-4">        
+                    <input type="text" class="form-control" formControlName="NWT">
+                    <div class="text-danger" *ngIf="calculateForm.NWT.touched && calculateForm.NWT.invalid">Net Weight is required</div>
+                     </div>
+                </div>
+                <div class="form-gorup row mt-2">
+                    <label for="" class="col-sm-2">Rate</label>
+                    <div class="col-sm-4">        
+                    <input type="text" class="form-control" formControlName="Rate">
+                    <div class="text-danger" *ngIf="calculateForm.Rate.touched && calculateForm.Rate.invalid">Rate is required</div>
+                     </div>
+                </div>
+                <div class="form-gorup row mt-2">
+                    <label for="" class="col-sm-2">Taxable Value</label>
+                    <div class="col-sm-4">        
+                    <input type="text" class="form-control"  [value]="taxableValue">
+                     </div>
+                </div>
+                <div class="form-gorup row mt-2">
+                    <div class="col-sm-3"></div>
+                  <button (click)="calculateTotal()" class="btn btn-success col-sm-2">Add</button>
+                </div>
+            </form>
+        </div>
+    </div>
+       <div class="col-sm-10 mt-2" >
+       <table class="table table-bordered" style="border: 1px solid;" >
+        <thead>
+        <tr>
+            <th>Action</th>
+            <th>
+             Product Name
+            </th>
+            <th>
+               Gross Wt
+            </th>
+            <th>
+             Net Wt
+            </th>
+            <th>
+             Rate per Unit
+            </th>
+            <th>
+             Taxable Value
+            </th>
+            <th>
+             CGST
+            </th>
+            <th>
+             SGST
+            </th>
+            <th>
+             IGST
+            </th>
+            <th>
+             Total
+            </th>
+        </tr>
+     </thead>
+     <tbody>
+        <tr *ngFor="let dynamic of fieldArray; let i=index;">
+         <td>
+             <i (click)="deleteRow(i)" class="fa fa-trash fa-2x"></i>
+             </td>
+            <td>
+             <label for="" class="form-control">{{dynamic.Product}}</label>
+            </td>
+            <td>
+             <label for="" class="form-control">{{dynamic.GrossWt}}</label>
+            </td>
+            <td>
+             <label for="" class="form-control">{{dynamic.NetWt}}</label>
+            </td>
+            <td>
+             <label for="" class="form-control">{{dynamic.Rate}}</label>
+            </td>
+            <td>
+             <label for="" class="form-control">{{dynamic.TaxableValue}}</label>
+            </td>
+            <td>
+             <label for="" class="form-control">{{dynamic.CGST}}</label>
+            </td>
+            <td>
+             <label for="" class="form-control">{{dynamic.SGST}}</label>
+            </td>
+            <td>
+                
+            </td>
+            <td>
+             <label for="" class="form-control">{{dynamic.Total}}</label>
+            </td>
+        </tr>
+     </tbody>
+    </table>
+    </div>
+       <div class="row">
+            <div class="col-sm-1">
+                <button class="btn btn-success mt-2" [disabled]="customerDetails.invalid"  (click)="gotoInvoice()" >Invoice</button>
+            </div>
+            <div class="col-6"></div>
+           <div class="col-sm-2 mt-2">
+               <input [hidden]="isHide" type="text" class="form-control" [value]="finalTotal">
+           </div>
+       </div>
+    </div>
+       <div *ngIf="isInvoiceVisible" class="container row">
+           <app-invoice [Data]="fieldArray" [customerData]="customerData" [amount]="amount"></app-invoice>
+       </div>
