@@ -57,7 +57,7 @@ isInvoiceVisible=false;
     this.customerDetails=this.fb.group({
       Name:['',Validators.required],
       Address:['',Validators.required],
-      Mobile:['',Validators.required,Validators.pattern(this.numberRegEx)],
+      Mobile:['',Validators.required,Validators.pattern("^((\\+91-?)|0)?[0-9]{10}$")],
       PAN:['',Validators.required]
     })
   }
